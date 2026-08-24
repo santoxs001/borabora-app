@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { Profile } from '@/types';
 import { Button } from '@/components/ui/Button';
 import { PhotoSurface } from '@/components/ui/Photo';
-import { ConnectionMark, Wordmark } from '@/components/ui/Logo';
+import { ConnectionMark } from '@/components/ui/Logo';
 import { haptic } from '@/lib/haptics';
 import { useApp } from '@/store/app-store';
 
@@ -51,14 +51,13 @@ export function MatchOverlay() {
       <div className="relative flex items-center justify-center">
         <MatchPhoto profile={me(state.me)} side="left" />
         <span className="relative z-10 -mx-4 grid h-16 w-16 place-items-center rounded-full border border-ultraviolet/40 bg-obsidian text-ultraviolet shadow-glow animate-scale-in">
-          <ConnectionMark size={30} />
+          <ConnectionMark size={30} className="text-ultraviolet" />
         </span>
         <MatchPhoto profile={profile} side="right" />
       </div>
 
-      <div className="relative mt-10 text-center animate-fade-up" style={{ animationDelay: '160ms' }}>
-        <Wordmark className="text-5xl" animated />
-        <p className="mt-1 font-display text-5xl display-tight lowercase">
+      <div className="relative mt-12 text-center animate-fade-up" style={{ animationDelay: '160ms' }}>
+        <p className="font-display text-[54px] display-tight lowercase">
           well, hey<span className="text-ultraviolet">.</span>
         </p>
         <p className="mt-3 text-[15px] text-bone-dim">{profile.name} said hey back.</p>

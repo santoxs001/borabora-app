@@ -47,16 +47,19 @@ export function Toggle({
           onChange(!checked);
         }}
         className={cn(
-          'relative h-7 w-12 shrink-0 rounded-full transition-colors duration-250 ease-hey mt-0.5',
+          'relative mt-0.5 h-7 w-12 shrink-0 rounded-full transition-colors duration-200 ease-hey',
           'disabled:opacity-40',
           checked ? 'uv-gradient' : 'bg-graphite-light',
         )}
       >
+        {/* `left` is pinned rather than left to `auto`: Chromium resolves an
+            absolutely-positioned child of a <button> to the button's centre,
+            which would compound with the transform. */}
         <span
           className={cn(
-            'absolute top-1 h-5 w-5 rounded-full bg-bone shadow-float',
-            'transition-transform duration-250 ease-snap',
-            checked ? 'translate-x-6' : 'translate-x-1',
+            'absolute left-1 top-1 h-5 w-5 rounded-full bg-bone shadow-float',
+            'transition-transform duration-200 ease-snap',
+            checked ? 'translate-x-5' : 'translate-x-0',
           )}
         />
       </button>

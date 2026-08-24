@@ -167,7 +167,7 @@ export default function ChatPage() {
       )}
 
       {/* Messages */}
-      <div className="mx-auto w-full max-w-lg flex-1 overflow-y-auto overscroll-contain px-4 py-4">
+      <div className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-end overflow-y-auto overscroll-contain px-4 py-4">
         {messages.length === 0 ? (
           <div className="pt-10">
             <EmptyState

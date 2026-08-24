@@ -98,7 +98,7 @@ export default function MyProfilePage() {
 
         {/* Stats */}
         <section className="mt-6 grid grid-cols-3 gap-2.5 px-4">
-          <Stat label="likes you" value={likesCount} href="/likes" locked={!me.plus.active} />
+          <Stat label="likes you" value={likesCount} href="/likes" />
           <Stat label="matches" value={state.matches.length} href="/messages" />
           <Stat label="saved" value={savedCount} href="/messages" />
         </section>
@@ -113,8 +113,8 @@ export default function MyProfilePage() {
                 : 'border-white/[0.08] bg-graphite/25',
             )}
           >
-            <div className="flex items-center gap-3">
-              <span className="relative grid h-11 w-11 place-items-center">
+            <div className="flex items-center gap-3.5">
+              <span className="relative grid h-11 w-11 shrink-0 place-items-center">
                 {boostActive && (
                   <span className="absolute h-11 w-11 rounded-full bg-ultraviolet/30 animate-ring-out" />
                 )}
@@ -127,21 +127,23 @@ export default function MyProfilePage() {
                 <p className="text-sm text-bone-faint text-pretty">
                   {boostActive
                     ? `spotlight ends ${countdown(me.boost!.expiresAt)}`
-                    : 'spotlight puts you at the front for 30 minutes.'}
+                    : 'be first in the grid for 30 minutes.'}
                 </p>
               </div>
-              {!boostActive && (
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    dispatch({ type: 'startBoost' });
-                    toast('spotlight on. be seen.', { icon: 'sparkle', tone: 'uv' });
-                  }}
-                >
-                  spotlight
-                </Button>
-              )}
             </div>
+            {!boostActive && (
+              <Button
+                className="mt-4"
+                fullWidth
+                variant="secondary"
+                onClick={() => {
+                  dispatch({ type: 'startBoost' });
+                  toast('spotlight on. be seen.', { icon: 'sparkle', tone: 'uv' });
+                }}
+              >
+                spotlight me
+              </Button>
+            )}
           </div>
         </section>
 
@@ -189,24 +191,14 @@ export default function MyProfilePage() {
   );
 }
 
-function Stat({
-  label,
-  value,
-  href,
-  locked,
-}: {
-  label: string;
-  value: number;
-  href: string;
-  locked?: boolean;
-}) {
+function Stat({ label, value, href }: { label: string; value: number; href: string }) {
   return (
     <Link
       href={href}
       className="rounded-lg border border-white/[0.07] bg-graphite/25 px-3 py-4 text-center transition-colors hover:border-white/[0.16]"
     >
       <span className="block font-display text-2xl display-tight tabular-nums">
-        {locked ? <span className="blur-[5px] select-none">{value}</span> : value}
+        {value}
       </span>
       <span className="mt-0.5 block text-2xs uppercase tracking-[0.1em] text-bone-faint">
         {label}

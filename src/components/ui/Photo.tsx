@@ -43,7 +43,7 @@ export function PhotoSurface({
       {!src && initial && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 grid place-items-center font-display font-black leading-none text-bone/[0.055]"
+          className="pointer-events-none absolute inset-0 grid place-items-center font-display font-black leading-none text-bone/[0.075]"
           style={{ fontSize: 'min(46cqw, 42cqh, 220px)' }}
         >
           {initial}

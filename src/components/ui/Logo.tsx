@@ -31,20 +31,24 @@ export function Wordmark({
   );
 }
 
-/** The connection symbol from the brand sheet — two arcs meeting. */
+/**
+ * The connection symbol from the brand sheet: two arcs facing each
+ * other and meeting in the middle. Drawn as strokes rather than fills
+ * so it stays legible at 24px as well as at 240px.
+ */
 export function ConnectionMark({ size = 28, className }: { size?: number; className?: string }) {
   return (
     <svg viewBox="0 0 48 48" width={size} height={size} aria-hidden className={className}>
-      <path
-        d="M6 6c10 0 16 7 18 18 2-11 8-18 18-18-10 0-16 7-18 18C22 13 16 6 6 6z"
-        fill="currentColor"
-        opacity="0.9"
-      />
-      <path
-        d="M6 42c10 0 16-7 18-18 2 11 8 18 18 18-10 0-16-7-18-18C22 35 16 42 6 42z"
-        fill="currentColor"
-        opacity="0.9"
-      />
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M9 8 Q25 24 9 40" />
+        <path d="M39 8 Q23 24 39 40" />
+      </g>
     </svg>
   );
 }

@@ -23,7 +23,7 @@ export function StepProgress({
         <span
           key={i}
           className={cn(
-            'h-1 flex-1 rounded-full transition-all duration-400 ease-hey',
+            'h-1 flex-1 rounded-full transition-all duration-500 ease-hey',
             i < step ? 'uv-gradient' : 'bg-white/[0.1]',
           )}
         />
