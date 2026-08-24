@@ -1,0 +1,279 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ────────────────────────────────────────────────────────────────
+   HEY · design tokens
+   The palette is deliberately narrow: obsidian ground, bone type,
+   graphite surfaces, ultraviolet as the single accent.
+   ──────────────────────────────────────────────────────────────── */
+:root {
+  --obsidian: #0b0b0d;
+  --bone: #f4f2ee;
+  --graphite: #2a2a2f;
+  --ultraviolet: #7a3cff;
+
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Archivo', 'Inter', system-ui, sans-serif;
+
+  --nav-h: 76px;
+  --header-h: 60px;
+
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-obsidian text-bone font-sans antialiased;
+    overscroll-behavior-y: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Focus is never removed — only restyled. Keyboard + switch users
+     depend on it, and it also reads as part of the brand. */
+  :focus-visible {
+    outline: 2px solid var(--ultraviolet);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: rgba(122, 60, 255, 0.4);
+    color: var(--bone);
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px; /* prevents iOS zoom-on-focus */
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Frosted surface used by headers, nav, sheets. */
+  .surface-blur {
+    background: rgba(11, 11, 13, 0.72);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+
+  .hairline {
+    border-color: rgba(244, 242, 238, 0.08);
+  }
+
+  .card-surface {
+    background: linear-gradient(180deg, rgba(42, 42, 47, 0.55) 0%, rgba(28, 28, 33, 0.9) 100%);
+    border: 1px solid rgba(244, 242, 238, 0.07);
+  }
+
+  .uv-gradient {
+    background: linear-gradient(135deg, #9463ff 0%, #7a3cff 48%, #5a22d6 100%);
+  }
+
+  /* Editorial scrim so type stays readable over any photo. */
+  .photo-scrim {
+    background: linear-gradient(
+      to top,
+      rgba(11, 11, 13, 0.94) 0%,
+      rgba(11, 11, 13, 0.72) 26%,
+      rgba(11, 11, 13, 0.18) 55%,
+      rgba(11, 11, 13, 0) 78%
+    );
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .snap-x-mandatory {
+    scroll-snap-type: x mandatory;
+  }
+
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: rgba(42, 42, 47, 0.6);
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(244, 242, 238, 0.07),
+      transparent
+    );
+    animation: shimmer 1.6s infinite;
+  }
+
+  /* Fine film grain — keeps large flat dark areas from banding. */
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.16;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  /* Display type is set tight and heavy — the wordmark's voice. */
+  .display-tight {
+    letter-spacing: -0.035em;
+    font-weight: 800;
+    line-height: 0.94;
+  }
+  .eyebrow {
+    @apply text-2xs uppercase tracking-[0.18em] text-bone-faint;
+  }
+}
+
+/* ── Range inputs ─────────────────────────────────────────────── */
+.hey-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 24px;
+  background: transparent;
+}
+.hey-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #7a3cff 0%,
+    #9463ff var(--pct, 50%),
+    #3a3a42 var(--pct, 50%),
+    #3a3a42 100%
+  );
+}
+.hey-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: #3a3a42;
+}
+.hey-range::-moz-range-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: #7a3cff;
+}
+.hey-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -9px;
+  border-radius: 999px;
+  background: #f4f2ee;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.7);
+  cursor: grab;
+}
+.hey-range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 999px;
+  background: #f4f2ee;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.7);
+}
+
+/* Two stacked transparent tracks for the dual-thumb range. */
+.hey-range-bare {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+  height: 24px;
+}
+.hey-range-bare::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 24px;
+}
+.hey-range-bare::-moz-range-track {
+  background: transparent;
+  height: 24px;
+}
+.hey-range-bare::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #f4f2ee;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.7);
+  cursor: grab;
+}
+.hey-range-bare::-moz-range-thumb {
+  pointer-events: auto;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 999px;
+  background: #f4f2ee;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.7);
+}
+
+/* ── Match moment ─────────────────────────────────────────────── */
+@keyframes match-slide-left {
+  from {
+    transform: translateX(-40px) rotate(-6deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) rotate(-3deg);
+    opacity: 1;
+  }
+}
+@keyframes match-slide-right {
+  from {
+    transform: translateX(40px) rotate(6deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) rotate(3deg);
+    opacity: 1;
+  }
+}
