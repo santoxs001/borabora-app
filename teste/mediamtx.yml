@@ -1,0 +1,36 @@
+# Câmera falsa: gera dois streams RTSP com ffmpeg, imitando a CA-1003
+# (/onvif1 = principal, /onvif2 = substream). Usado só no perfil "teste".
+logLevel: info
+readTimeout: 10s
+writeTimeout: 10s
+
+rtspAddress: :554
+rtmp: no
+hls: no
+webrtc: no
+srt: no
+
+# API local: o serviço ONVIF falso usa isso para simular o reboot da câmera.
+api: yes
+apiAddress: :9997
+
+paths:
+  onvif1:
+    runOnDemand: >
+      ffmpeg -hide_banner -loglevel warning -re
+      -f lavfi -i testsrc=size=1280x720:rate=15
+      -c:v libx264 -preset ultrafast -tune zerolatency -g 30 -pix_fmt yuv420p
+      -f rtsp -rtsp_transport tcp rtsp://localhost:$RTSP_PORT/$MTX_PATH
+    runOnDemandRestart: yes
+    runOnDemandStartTimeout: 20s
+    runOnDemandCloseAfter: 30s
+
+  onvif2:
+    runOnDemand: >
+      ffmpeg -hide_banner -loglevel warning -re
+      -f lavfi -i testsrc=size=640x360:rate=10
+      -c:v libx264 -preset ultrafast -tune zerolatency -g 20 -pix_fmt yuv420p
+      -f rtsp -rtsp_transport tcp rtsp://localhost:$RTSP_PORT/$MTX_PATH
+    runOnDemandRestart: yes
+    runOnDemandStartTimeout: 20s
+    runOnDemandCloseAfter: 30s

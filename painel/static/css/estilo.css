@@ -1,0 +1,180 @@
+/* Painel de câmeras - Buffet Bora Bora
+   Mesma identidade visual do app de gestão (laranja sobre fundo escuro). */
+
+:root {
+  --bg: #0F0D0C;
+  --bg-card: #181513;
+  --bg-input: #211D1A;
+  --borda: #2a2420;
+  --primary: #FF4422;
+  --primary-dark: #cc361b;
+  --texto: #F5F0EB;
+  --muted: #8a8279;
+  --ok: #00C4A7;
+  --erro: #ff4444;
+  --alerta: #ffb020;
+  --raio: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+
+html, body { background: var(--bg); color: var(--texto); -webkit-font-smoothing: antialiased; min-height: 100%; }
+a { color: var(--primary); }
+button { font: inherit; cursor: pointer; }
+
+/* ------------------------------------------------------------------ login */
+.tela-login {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
+  background: radial-gradient(circle at top right, #3a150e, var(--bg) 60%);
+}
+.caixa-login {
+  width: 100%; max-width: 360px; background: var(--bg-card); padding: 32px 26px;
+  border-radius: 16px; border: 1px solid #333; box-shadow: 0 15px 35px rgba(0,0,0,.6); text-align: center;
+}
+.caixa-login h1 { color: var(--primary); font-size: 30px; letter-spacing: 2px; }
+.caixa-login .sub { color: var(--muted); font-size: 12px; margin: 6px 0 26px; text-transform: uppercase; letter-spacing: 2px; }
+
+.campo { margin-bottom: 18px; text-align: left; }
+.campo label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 7px;
+               text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+.campo input {
+  width: 100%; padding: 14px; background: var(--bg-input); border: 1px solid #444;
+  border-radius: 8px; color: var(--texto); font-size: 16px; outline: none; transition: .2s;
+}
+.campo input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,68,34,.2); }
+
+.btn {
+  width: 100%; padding: 14px; border: none; border-radius: 8px; background: var(--primary);
+  color: #fff; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; transition: .2s;
+}
+.btn:active { transform: scale(.98); background: var(--primary-dark); }
+.btn.secundario { background: var(--bg-input); border: 1px solid #444; color: var(--texto); }
+.btn.pequeno { width: auto; padding: 8px 14px; font-size: 12px; }
+.aviso-erro { color: var(--erro); font-size: 13px; margin-top: 14px; font-weight: 600; min-height: 18px; }
+
+/* ------------------------------------------------------------------- app */
+.topo {
+  position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 14px 18px; background: rgba(24,21,19,.96); backdrop-filter: blur(10px);
+  border-bottom: 1px solid #333;
+}
+.topo h1 { color: var(--primary); font-size: 19px; letter-spacing: 1px; white-space: nowrap; }
+.topo .resumo { font-size: 12px; color: var(--muted); }
+.topo .direita { display: flex; align-items: center; gap: 10px; }
+.sair { background: transparent; color: var(--muted); border: 1px solid #444; padding: 6px 12px;
+        border-radius: 6px; font-size: 12px; }
+.sair:hover { background: #333; color: #fff; }
+
+.conteudo { padding: 16px; padding-bottom: 96px; max-width: 1400px; margin: 0 auto; }
+.aba { display: none; }
+.aba.ativa { display: block; animation: aparecer .3s ease; }
+@keyframes aparecer { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.cartao { background: var(--bg-card); border: 1px solid var(--borda); border-radius: var(--raio);
+          padding: 16px; margin-bottom: 14px; }
+.cartao h2 { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+
+/* --------------------------------------------------------------- ao vivo */
+.grade { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.camera { background: #000; border: 1px solid var(--borda); border-radius: var(--raio); overflow: hidden; position: relative; }
+.camera .tela { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
+.camera video, .camera img.quadro { width: 100%; height: 100%; object-fit: contain; display: block; background: #000; }
+.camera .rodape { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+                  padding: 9px 12px; background: var(--bg-card); font-size: 13px; }
+.camera .rodape .nome { font-weight: 600; }
+.camera .rodape .local { color: var(--muted); font-size: 11px; }
+.camera .selo {
+  position: absolute; top: 8px; left: 8px; display: flex; align-items: center; gap: 6px;
+  background: rgba(0,0,0,.6); padding: 4px 9px; border-radius: 20px; font-size: 11px; letter-spacing: .5px;
+}
+.camera .modo { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.6); color: var(--muted);
+                padding: 4px 8px; border-radius: 20px; font-size: 10px; text-transform: uppercase; }
+.camera .mensagem {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
+  padding: 16px; color: var(--muted); font-size: 13px; background: rgba(0,0,0,.65);
+}
+.ponto { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); flex: none; }
+.ponto.online { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+.ponto.offline { background: var(--erro); box-shadow: 0 0 8px var(--erro); }
+
+/* ---------------------------------------------------------------- status */
+.lista-status { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.item-status { background: var(--bg-card); border: 1px solid var(--borda); border-radius: var(--raio); padding: 14px; }
+.item-status .cabecalho { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.item-status .cabecalho strong { font-size: 15px; }
+.linha { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; padding: 4px 0;
+         border-bottom: 1px dashed #241f1b; }
+.linha:last-of-type { border-bottom: none; }
+.linha span:first-child { color: var(--muted); }
+.tag { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 20px; }
+.tag.online { background: rgba(0,196,167,.15); color: var(--ok); }
+.tag.offline { background: rgba(255,68,68,.15); color: var(--erro); }
+
+.eventos { max-height: 340px; overflow-y: auto; font-size: 13px; }
+.evento { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #221d1a; }
+.evento:last-child { border-bottom: none; }
+.evento .quando { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.evento.queda .tipo, .evento.erro .tipo { color: var(--erro); }
+.evento.recuperacao .tipo { color: var(--ok); }
+.evento.reinicio .tipo { color: var(--alerta); }
+.evento .tipo { text-transform: uppercase; font-size: 11px; font-weight: 700; min-width: 86px; }
+
+/* ------------------------------------------------------------- gravações */
+.filtros { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+.filtros .campo { margin-bottom: 0; flex: 1 1 180px; }
+.filtros select, .filtros input[type=date] {
+  width: 100%; padding: 11px; background: var(--bg-input); border: 1px solid #444;
+  border-radius: 8px; color: var(--texto); font-size: 15px; outline: none;
+}
+.grade-gravacoes { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.horas { display: flex; flex-wrap: wrap; gap: 8px; }
+.hora {
+  background: var(--bg-input); border: 1px solid #3a322c; color: var(--texto); border-radius: 8px;
+  padding: 10px 12px; font-size: 13px; min-width: 74px; text-align: center;
+}
+.hora:hover { border-color: var(--primary); }
+.hora small { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+.clipes { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.clipe { background: var(--bg-input); border: 1px solid #3a322c; border-radius: 10px; overflow: hidden; text-align: left; padding: 0; }
+.clipe img { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; display: block; }
+.clipe .info { padding: 8px 10px; font-size: 12px; }
+.clipe .info .hora-clipe { font-weight: 700; }
+.clipe .info small { color: var(--muted); }
+.vazio { color: var(--muted); font-size: 13px; padding: 10px 0; }
+
+/* ---------------------------------------------------------------- modal */
+.modal { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.92);
+         display: none; flex-direction: column; }
+.modal.aberto { display: flex; }
+.modal .barra { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; }
+.modal .barra strong { font-size: 15px; }
+.modal .palco { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0 10px 16px; }
+.modal video, .modal img { max-width: 100%; max-height: 100%; background: #000; }
+.fechar { background: var(--bg-input); border: 1px solid #444; color: var(--texto);
+          border-radius: 8px; padding: 8px 14px; font-size: 13px; }
+
+/* ----------------------------------------------------------------- disco */
+.barra-disco { height: 14px; background: var(--bg-input); border-radius: 10px; overflow: hidden; margin: 10px 0 8px; }
+.barra-disco div { height: 100%; background: var(--ok); transition: width .4s ease; }
+.barra-disco div.atencao { background: var(--alerta); }
+.barra-disco div.critico { background: var(--erro); }
+
+/* --------------------------------------------------------------- navegação */
+.menu {
+  position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; display: flex; justify-content: space-around;
+  background: rgba(24,21,19,.97); backdrop-filter: blur(10px); border-top: 1px solid #333;
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+}
+.menu button {
+  flex: 1; background: none; border: none; color: var(--muted); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .5px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.menu button .icone { font-size: 20px; }
+.menu button.ativo { color: var(--primary); }
+
+@media (min-width: 900px) {
+  .menu { max-width: 720px; left: 50%; transform: translateX(-50%); border-radius: 14px 14px 0 0;
+          border-left: 1px solid #333; border-right: 1px solid #333; }
+  .grade { grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); }
+}

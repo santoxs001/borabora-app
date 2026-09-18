@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# MODO DE TESTE - câmeras falsas geradas por ffmpeg (nenhuma câmera real).
+# Usado por:  docker compose --profile teste up
+#
+# Os "ips" aqui são nomes de serviço do docker-compose, não endereços reais.
+# As câmeras falsas não pedem senha (usuario/senha_env vazios de propósito).
+# ---------------------------------------------------------------------------
+
+padroes:
+  usuario: ""
+  senha_env: ""
+  porta_rtsp: 554
+  porta_onvif: 5000
+  caminho_principal: /onvif1
+  caminho_substream: /onvif2
+  onvif: true
+  detectar: true
+  deteccao:
+    largura: 640
+    altura: 360
+    fps: 5
+  retencao:
+    continuo_dias: 1
+    eventos_dias: 2
+
+cameras:
+  - id: teste_salao
+    nome: "TESTE - Salão"
+    local: "Salão (simulado)"
+    ip: cam-teste-1
+
+  - id: teste_entrada
+    nome: "TESTE - Entrada"
+    local: "Entrada (simulada)"
+    ip: cam-teste-2
+
+  - id: teste_cozinha
+    nome: "TESTE - Cozinha"
+    local: "Cozinha (simulada)"
+    ip: cam-teste-3

@@ -1,0 +1,57 @@
+# ---------------------------------------------------------------------------
+# Buffet Bora Bora - Cadastro de câmeras (fonte única de verdade)
+#
+# Para ADICIONAR uma câmera: copie um bloco abaixo, mude id/nome/ip e rode:
+#     python3 scripts/gerar_configs.py
+#     docker compose up -d
+# (ou simplesmente `docker compose up -d`, que regenera as configs sozinho)
+#
+# NENHUMA SENHA AQUI. As senhas ficam no .env e são referenciadas por nome
+# através de "senha_env".
+# ---------------------------------------------------------------------------
+
+padroes:
+  usuario: admin
+  senha_env: CAM_SENHA_PADRAO     # nome da variável no .env
+  porta_rtsp: 554
+  porta_onvif: 5000
+  caminho_principal: /onvif1      # stream principal (gravação) - CA-1003 / Yoosee
+  caminho_substream: /onvif2      # substream (ao vivo + detecção)
+  onvif: true                     # permite reinício remoto via ONVIF SystemReboot
+  detectar: true                  # detecção de pessoas no substream
+  deteccao:
+    largura: 640
+    altura: 360
+    fps: 5
+  retencao:
+    continuo_dias: 7              # gravação contínua
+    eventos_dias: 14              # trechos com pessoa detectada
+
+cameras:
+  - id: salao                     # só letras minúsculas, números e "_"
+    nome: "Salão Principal"
+    local: "Salão"
+    ip: 192.168.0.101
+
+  - id: entrada
+    nome: "Entrada / Recepção"
+    local: "Entrada"
+    ip: 192.168.0.102
+
+  - id: cozinha
+    nome: "Cozinha"
+    local: "Cozinha"
+    ip: 192.168.0.103
+
+  - id: area_externa
+    nome: "Área Externa"
+    local: "Externo"
+    ip: 192.168.0.104
+    # Exemplos de ajustes por câmera (opcionais):
+    # usuario: admin
+    # senha_env: CAM_AREA_EXTERNA_SENHA
+    # porta_rtsp: 554
+    # porta_onvif: 5000
+    # detectar: false
+    # retencao:
+    #   continuo_dias: 3
