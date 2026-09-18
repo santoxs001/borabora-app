@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FF4422">
+  <title>Câmeras - Buffet Bora Bora</title>
+  <link rel="stylesheet" href="/estatico/css/estilo.css">
+</head>
+<body>
+  <header class="topo">
+    <div>
+      <h1>BORA BORA</h1>
+      <div class="resumo" id="resumo">carregando...</div>
+    </div>
+    <div class="direita">
+      <span class="resumo" id="usuario-logado"></span>
+      <button class="sair" onclick="location.href='/logout'">Sair</button>
+    </div>
+  </header>
+
+  <main class="conteudo">
+    <!-- ------------------------------------------------------- AO VIVO -->
+    <section class="aba ativa" id="aba-ao-vivo">
+      <div class="grade" id="grade-cameras"></div>
+      <p class="vazio" id="aviso-ao-vivo"></p>
+    </section>
+
+    <!-- -------------------------------------------------------- STATUS -->
+    <section class="aba" id="aba-status">
+      <div class="lista-status" id="lista-status"></div>
+      <div class="cartao">
+        <h2>Últimos acontecimentos</h2>
+        <div class="eventos" id="lista-eventos"><p class="vazio">carregando...</p></div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------- GRAVAÇÕES -->
+    <section class="aba" id="aba-gravacoes">
+      <div class="cartao">
+        <h2>Escolha a câmera e o dia</h2>
+        <div class="filtros">
+          <div class="campo">
+            <label for="filtro-camera">Câmera</label>
+            <select id="filtro-camera"></select>
+          </div>
+          <div class="campo">
+            <label for="filtro-data">Dia</label>
+            <input type="date" id="filtro-data">
+          </div>
+          <button class="btn pequeno" id="botao-buscar">Buscar</button>
+        </div>
+      </div>
+
+      <div class="grade-gravacoes">
+        <div class="cartao">
+          <h2>Gravação contínua (por hora)</h2>
+          <div class="horas" id="lista-horas"><p class="vazio">escolha uma câmera e um dia</p></div>
+        </div>
+        <div class="cartao">
+          <h2>Movimentos detectados (pessoas)</h2>
+          <div class="clipes" id="lista-clipes"></div>
+          <p class="vazio" id="aviso-clipes"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------- SISTEMA -->
+    <section class="aba" id="aba-sistema">
+      <div class="cartao">
+        <h2>Espaço em disco das gravações</h2>
+        <div id="disco"><p class="vazio">carregando...</p></div>
+      </div>
+      <div class="cartao">
+        <h2>Sistema</h2>
+        <div id="info-sistema"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="menu">
+    <button class="ativo" data-aba="ao-vivo"><span class="icone">📹</span>Ao vivo</button>
+    <button data-aba="status"><span class="icone">📶</span>Status</button>
+    <button data-aba="gravacoes"><span class="icone">🎞️</span>Gravações</button>
+    <button data-aba="sistema"><span class="icone">⚙️</span>Sistema</button>
+  </nav>
+
+  <!-- Player em tela cheia (ao vivo e gravações) -->
+  <div class="modal" id="modal">
+    <div class="barra">
+      <strong id="modal-titulo"></strong>
+      <button class="fechar" onclick="fecharModal()">Fechar ✕</button>
+    </div>
+    <div class="palco" id="modal-palco"></div>
+  </div>
+
+  <script src="/estatico/js/hls.min.js" onerror="window.HLS_INDISPONIVEL = true"></script>
+  <script src="/estatico/js/player.js"></script>
+  <script src="/estatico/js/painel.js"></script>
+</body>
+</html>

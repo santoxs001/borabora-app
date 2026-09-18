@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FF4422">
+  <title>Câmeras - Buffet Bora Bora</title>
+  <link rel="stylesheet" href="/estatico/css/estilo.css">
+</head>
+<body>
+  <main class="tela-login">
+    <div class="caixa-login">
+      <h1>BORA BORA</h1>
+      <p class="sub">Monitoramento interno</p>
+
+      <form id="form-login">
+        <div class="campo">
+          <label for="usuario">Usuário</label>
+          <input id="usuario" name="usuario" type="text" autocomplete="username" required autofocus>
+        </div>
+        <div class="campo">
+          <label for="senha">Senha</label>
+          <input id="senha" name="senha" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn" type="submit" id="botao">Entrar</button>
+      </form>
+
+      <p class="aviso-erro" id="erro"></p>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('form-login');
+    const erro = document.getElementById('erro');
+    const botao = document.getElementById('botao');
+
+    form.addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+      erro.textContent = '';
+      botao.disabled = true;
+      botao.textContent = 'Entrando...';
+      try {
+        const resposta = await fetch('/login', { method: 'POST', body: new FormData(form) });
+        if (resposta.ok) {
+          window.location.href = '/';
+          return;
+        }
+        const dados = await resposta.json().catch(() => ({}));
+        erro.textContent = dados.erro || 'Não consegui entrar. Tente de novo.';
+      } catch (e) {
+        erro.textContent = 'Servidor fora do ar. Confira se o painel está ligado.';
+      }
+      botao.disabled = false;
+      botao.textContent = 'Entrar';
+      document.getElementById('senha').value = '';
+    });
+  </script>
+</body>
+</html>

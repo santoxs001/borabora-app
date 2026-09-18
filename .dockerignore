@@ -1,0 +1,12 @@
+# Nunca mandar para o build: gravações (enormes), segredos e configs geradas
+gravacoes/
+dados/
+config/
+.env
+.git/
+.gitignore
+**/__pycache__/
+*.pyc
+venv/
+.venv/
+README.md

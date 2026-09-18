@@ -1,0 +1,281 @@
+# ===========================================================================
+# Buffet Bora Bora - sistema interno de câmeras (NVR)
+#
+#   docker compose up -d                  liga o sistema
+#   docker compose --profile teste up     liga com câmeras falsas (sem hardware)
+#   docker compose logs -f watchdog       acompanha o watchdog
+#
+# Nada aqui é exposto para a internet: todas as portas ficam presas ao
+# BIND_IP definido no .env (rede local).
+# ===========================================================================
+
+name: borabora-cameras
+
+services:
+  # ------------------------------------------------------------------------
+  # Gera as configs do go2rtc e do Frigate a partir do cameras.yaml.
+  # Roda uma vez a cada "docker compose up" e termina.
+  # (é o único container sem restart automático: é uma tarefa, não um serviço)
+  # ------------------------------------------------------------------------
+  gerador:
+    build:
+      context: .
+      dockerfile: scripts/Dockerfile
+    container_name: bb-gerador
+    command: >
+      python /projeto/scripts/gerar_configs.py
+      --cameras /projeto/${CAMERAS_FILE:-cameras.yaml}
+      --saida /projeto/config
+      --env /projeto/.env
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+      CAM_SENHA_PADRAO: ${CAM_SENHA_PADRAO:-}
+      GO2RTC_CANDIDATE: ${GO2RTC_CANDIDATE:-}
+    volumes:
+      - .:/projeto
+    restart: "no"
+
+  # ------------------------------------------------------------------------
+  # go2rtc: ponto único de conexão com as câmeras. Reconecta sozinho e
+  # redistribui o vídeo (WebRTC/MSE para o painel, RTSP para o Frigate).
+  # ------------------------------------------------------------------------
+  go2rtc:
+    image: alexxit/go2rtc:${GO2RTC_VERSION:-latest}
+    container_name: bb-go2rtc
+    restart: unless-stopped
+    depends_on:
+      gerador:
+        condition: service_completed_successfully
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+    volumes:
+      - ./config/go2rtc:/config:ro
+    ports:
+      - "${BIND_IP:-0.0.0.0}:1984:1984"        # API + player do go2rtc
+      - "${BIND_IP:-0.0.0.0}:8554:8554"        # RTSP redistribuído
+      - "${BIND_IP:-0.0.0.0}:8555:8555/tcp"    # WebRTC
+      - "${BIND_IP:-0.0.0.0}:8555:8555/udp"    # WebRTC
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:1984/api/streams || curl -fsS http://127.0.0.1:1984/api/streams || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ------------------------------------------------------------------------
+  # Frigate: gravação contínua + detecção de pessoas. Consome os streams
+  # pelo go2rtc (nunca direto das câmeras) e não publica porta nenhuma.
+  # ------------------------------------------------------------------------
+  frigate:
+    image: ghcr.io/blakeblackshear/frigate:${FRIGATE_VERSION:-0.15.2}
+    container_name: bb-frigate
+    restart: unless-stopped
+    depends_on:
+      gerador:
+        condition: service_completed_successfully
+      go2rtc:
+        condition: service_started
+    shm_size: ${FRIGATE_SHM:-256mb}
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./config/frigate:/config
+      - ${PASTA_GRAVACOES:-./gravacoes}:/media/frigate
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    # Para abrir a interface do próprio Frigate na rede local, descomente:
+    # ports:
+    #   - "${BIND_IP:-0.0.0.0}:5000:5000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:5000/api/version || wget -q -O /dev/null http://127.0.0.1:5000/api/version || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+  # ------------------------------------------------------------------------
+  # Watchdog: checa cada câmera a cada 60s e reinicia via ONVIF quem travar.
+  # ------------------------------------------------------------------------
+  watchdog:
+    build:
+      context: .
+      dockerfile: watchdog/Dockerfile
+    container_name: bb-watchdog
+    restart: unless-stopped
+    depends_on:
+      go2rtc:
+        condition: service_started
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+      CAMERAS_YAML: /projeto/cameras.yaml
+      CAM_SENHA_PADRAO: ${CAM_SENHA_PADRAO:-}
+      WATCHDOG_ESTADO: /dados/estado.json
+      WATCHDOG_INTERVALO: ${WATCHDOG_INTERVALO:-60}
+      WATCHDOG_REINICIAR_APOS: ${WATCHDOG_REINICIAR_APOS:-180}
+      WATCHDOG_ESPERA_REBOOT: ${WATCHDOG_ESPERA_REBOOT:-600}
+      WATCHDOG_MAX_REBOOTS_HORA: ${WATCHDOG_MAX_REBOOTS_HORA:-3}
+      GO2RTC_HOST: go2rtc
+    volumes:
+      # o arquivo escolhido no .env entra sempre no mesmo lugar
+      - ./${CAMERAS_FILE:-cameras.yaml}:/projeto/cameras.yaml:ro
+      - watchdog_dados:/dados
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ------------------------------------------------------------------------
+  # Painel web do Buffet Bora Bora (login, ao vivo, status, gravações).
+  # ------------------------------------------------------------------------
+  painel:
+    build:
+      context: .
+      dockerfile: painel/Dockerfile
+    container_name: bb-painel
+    restart: unless-stopped
+    depends_on:
+      watchdog:
+        condition: service_started
+      frigate:
+        condition: service_started
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+      CAMERAS_YAML: /projeto/cameras.yaml
+      PAINEL_PASTA_GRAVACOES: /gravacoes
+      FRIGATE_URL: http://frigate:5000
+      WATCHDOG_URL: http://watchdog:8080
+      PAINEL_SEGREDO: ${PAINEL_SEGREDO:-}
+      PAINEL_HORAS_SESSAO: ${PAINEL_HORAS_SESSAO:-12}
+      PAINEL_ADMIN_USUARIO: ${PAINEL_ADMIN_USUARIO:-admin}
+      PAINEL_ADMIN_HASH: ${PAINEL_ADMIN_HASH:-}
+      PAINEL_ADMIN_HASH_B64: ${PAINEL_ADMIN_HASH_B64:-}
+      PAINEL_VISUALIZADOR_USUARIO: ${PAINEL_VISUALIZADOR_USUARIO:-}
+      PAINEL_VISUALIZADOR_HASH: ${PAINEL_VISUALIZADOR_HASH:-}
+      PAINEL_VISUALIZADOR_HASH_B64: ${PAINEL_VISUALIZADOR_HASH_B64:-}
+      PAINEL_GO2RTC_PUBLICO: ${PAINEL_GO2RTC_PUBLICO:-}
+    volumes:
+      - ./${CAMERAS_FILE:-cameras.yaml}:/projeto/cameras.yaml:ro
+      - ${PASTA_GRAVACOES:-./gravacoes}:/gravacoes:ro
+    ports:
+      - "${BIND_IP:-0.0.0.0}:${PAINEL_PORTA:-8080}:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ========================================================================
+  # PERFIL "teste": câmeras falsas (ffmpeg), para validar o sistema inteiro
+  # sem nenhuma câmera de verdade ligada.
+  #   docker compose --profile teste up
+  # ========================================================================
+  cam-teste-1:
+    image: bluenviron/mediamtx:${MEDIAMTX_VERSION:-latest-ffmpeg}
+    container_name: bb-cam-teste-1
+    profiles: ["teste"]
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+      MTX_CONFPATH: /mediamtx.yml
+    volumes:
+      - ./teste/mediamtx.yml:/mediamtx.yml:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:9997/v3/paths/list || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  onvif-teste-1:
+    build:
+      context: .
+      dockerfile: teste/Dockerfile
+    container_name: bb-onvif-teste-1
+    profiles: ["teste"]
+    restart: unless-stopped
+    network_mode: "service:cam-teste-1"
+    depends_on:
+      - cam-teste-1
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+      ONVIF_PORTA: 5000
+      CAMERA_NOME: teste_salao
+      MEDIAMTX_API: http://127.0.0.1:9997
+      REBOOT_SEGUNDOS: 25
+
+  cam-teste-2:
+    image: bluenviron/mediamtx:${MEDIAMTX_VERSION:-latest-ffmpeg}
+    container_name: bb-cam-teste-2
+    profiles: ["teste"]
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+      MTX_CONFPATH: /mediamtx.yml
+    volumes:
+      - ./teste/mediamtx.yml:/mediamtx.yml:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:9997/v3/paths/list || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  onvif-teste-2:
+    build:
+      context: .
+      dockerfile: teste/Dockerfile
+    container_name: bb-onvif-teste-2
+    profiles: ["teste"]
+    restart: unless-stopped
+    network_mode: "service:cam-teste-2"
+    depends_on:
+      - cam-teste-2
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+      ONVIF_PORTA: 5000
+      CAMERA_NOME: teste_entrada
+      MEDIAMTX_API: http://127.0.0.1:9997
+      REBOOT_SEGUNDOS: 25
+
+  cam-teste-3:
+    image: bluenviron/mediamtx:${MEDIAMTX_VERSION:-latest-ffmpeg}
+    container_name: bb-cam-teste-3
+    profiles: ["teste"]
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+      MTX_CONFPATH: /mediamtx.yml
+    volumes:
+      - ./teste/mediamtx.yml:/mediamtx.yml:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:9997/v3/paths/list || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  onvif-teste-3:
+    build:
+      context: .
+      dockerfile: teste/Dockerfile
+    container_name: bb-onvif-teste-3
+    profiles: ["teste"]
+    restart: unless-stopped
+    network_mode: "service:cam-teste-3"
+    depends_on:
+      - cam-teste-3
+    environment:
+      TZ: ${TZ:-America/Sao_Paulo}
+      ONVIF_PORTA: 5000
+      CAMERA_NOME: teste_cozinha
+      MEDIAMTX_API: http://127.0.0.1:9997
+      REBOOT_SEGUNDOS: 25
+
+volumes:
+  watchdog_dados:

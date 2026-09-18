@@ -1,0 +1,19 @@
+# segredos e configs geradas
+.env
+config/go2rtc/
+config/frigate/
+
+# gravações e dados em execução
+gravacoes/
+dados/
+*.db
+
+# lixo de sistema / editores
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
