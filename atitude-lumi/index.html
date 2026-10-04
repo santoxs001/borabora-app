@@ -1,0 +1,828 @@
+<title>Atitude Lumi</title>
+<meta name="description" content="Atitude Lumi — perfis de alumínio extrudado em barras de 6 m, corte sob medida e acabamentos anodizados e pintados.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: folha técnica — conteúdo numa grade larga, seções separadas por linhas de cota, rodapé em forma de carimbo de desenho técnico */
+:root {
+  --bg: #ECEFF1;          /* alumínio escovado */
+  --surface: #F8F9FA;
+  --ink: #14181C;         /* grafite */
+  --muted: #56606A;
+  --line: #C4CBD1;
+  --accent: #2346C2;      /* azul anodizado */
+  --accent-ink: #FFFFFF;
+  --accent-soft: #DCE3FA;
+  --glow: #FFC24D;        /* luz de LED quente */
+  --metal-a: #B7BEC6;
+  --metal-b: #E4E8EB;
+  --diffuser: #FFFFFF;
+  --ok: #1D7A46;
+
+  --f-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --t-xs: .8125rem; --t-sm: .9375rem; --t-md: 1.0625rem; --t-lg: 1.375rem; --t-xl: 2rem; --t-2xl: clamp(2.4rem, 6vw, 4.4rem);
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1240px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111417; --surface: #191D21; --ink: #E8ECEF; --muted: #98A2AC; --line: #2C333A;
+    --accent: #8FA6FF; --accent-ink: #0D1330; --accent-soft: #1E2748; --glow: #FFC24D;
+    --metal-a: #5E6670; --metal-b: #A9B1B9; --diffuser: #F3F1EA; --ok: #5BC98A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111417; --surface: #191D21; --ink: #E8ECEF; --muted: #98A2AC; --line: #2C333A;
+  --accent: #8FA6FF; --accent-ink: #0D1330; --accent-soft: #1E2748; --glow: #FFC24D;
+  --metal-a: #5E6670; --metal-b: #A9B1B9; --diffuser: #F3F1EA; --ok: #5BC98A;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 var(--t-md)/1.6 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.05; }
+h2 { font-size: var(--t-xl); font-weight: 750; font-stretch: 112%; letter-spacing: -.01em; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.eyebrow { font: 500 var(--t-xs)/1.2 var(--f-mono); text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+
+/* Botões */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  font: 600 var(--t-sm)/1 var(--f-body); padding: .9rem 1.25rem; border-radius: 3px;
+  border: 1px solid var(--ink); background: var(--ink); color: var(--bg); cursor: pointer; text-decoration: none;
+  transition: transform .15s ease, background .15s ease;
+}
+.btn:hover { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn:active { transform: translateY(1px); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost:hover { border-color: var(--accent); color: var(--accent); background: transparent; }
+.btn.small { padding: .6rem .85rem; font-size: var(--t-xs); }
+.btn.block { width: 100%; }
+
+/* Cabeçalho */
+header.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.top .wrap { display: flex; align-items: center; gap: 1.5rem; min-height: 64px; }
+.logo { display: flex; align-items: center; gap: .6rem; text-decoration: none; }
+.logo svg { width: 30px; height: 30px; flex: none; }
+.logo b { font: 800 1.15rem/1 var(--f-display); font-stretch: 125%; letter-spacing: -.01em; }
+.logo b span { color: var(--accent); }
+nav.main { display: flex; gap: 1.25rem; margin-left: auto; }
+nav.main a { text-decoration: none; font-size: var(--t-sm); color: var(--muted); }
+nav.main a:hover { color: var(--ink); }
+.cart-btn { position: relative; }
+.cart-btn .count {
+  min-width: 1.5em; height: 1.5em; border-radius: 99px; padding-inline: .35em;
+  background: var(--accent); color: var(--accent-ink);
+  display: inline-grid; place-items: center; font: 600 .75rem/1 var(--f-mono);
+}
+@media (max-width: 860px) { nav.main { display: none; } .top .wrap { justify-content: space-between; } .cart-btn { margin-left: auto; } }
+
+/* Hero */
+.hero { padding-block: clamp(2.5rem, 6vw, 5rem) clamp(2rem, 5vw, 4rem); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+.hero h1 { font-size: var(--t-2xl); font-weight: 800; font-stretch: 118%; letter-spacing: -.025em; margin-block: 1rem 1.25rem; }
+.hero h1 em { font-style: normal; font-stretch: 62%; font-weight: 500; color: var(--accent); }
+.hero .lede { font-size: var(--t-lg); line-height: 1.45; color: var(--muted); max-width: 34ch; }
+.hero .ctas { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+.drawing {
+  position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+  padding: clamp(1rem, 3vw, 2rem);
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 24px 24px; background-position: -1px -1px;
+}
+.drawing::after { content: ""; position: absolute; inset: 0; background: var(--surface); opacity: .72; pointer-events: none; border-radius: 4px; }
+.drawing > * { position: relative; z-index: 1; }
+.drawing svg { width: 100%; height: auto; display: block; }
+.drawing .tag { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: .75rem; margin-top: .5rem; }
+.glow { animation: pulse 4.5s ease-in-out infinite; transform-origin: center; }
+@keyframes pulse { 0%, 100% { opacity: .85; } 50% { opacity: 1; } }
+
+.specs { border-block: 1px solid var(--line); background: var(--surface); }
+.specs .wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.specs div.s { padding: 1.1rem 1rem; border-left: 1px solid var(--line); }
+.specs div.s:first-child { border-left: 0; padding-left: 0; }
+.specs b { display: block; font: 700 var(--t-lg)/1.1 var(--f-display); font-stretch: 112%; }
+.specs span { font-size: var(--t-xs); color: var(--muted); }
+@media (max-width: 760px) {
+  .hero .wrap { grid-template-columns: 1fr; }
+  .specs .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .specs div.s:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .specs div.s:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+
+/* Seções */
+section.block { padding-block: clamp(3rem, 7vw, 5.5rem); }
+.head { display: flex; justify-content: space-between; align-items: end; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.head .txt { display: grid; gap: .75rem; max-width: 60ch; }
+.head p { color: var(--muted); }
+
+/* Catálogo */
+.filters { display: flex; flex-wrap: wrap; gap: .5rem; }
+.chip {
+  font: 500 var(--t-xs)/1 var(--f-body); padding: .6rem .9rem; border-radius: 99px;
+  border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer;
+}
+.chip:hover { border-color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.search { display: flex; align-items: center; gap: .5rem; border: 1px solid var(--line); border-radius: 3px; padding-inline: .75rem; background: var(--surface); min-width: 0; flex: 1 1 220px; max-width: 320px; }
+.search input { border: 0; background: transparent; color: var(--ink); font: inherit; font-size: var(--t-sm); padding-block: .65rem; width: 100%; min-width: 0; outline: none; }
+.toolbar { display: flex; gap: 1rem; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.card { background: var(--surface); padding: 1.1rem; display: flex; flex-direction: column; gap: .8rem; min-width: 0; }
+.card .sec { aspect-ratio: 4 / 3; max-width: 100%; display: grid; place-items: center; background: var(--bg); border-radius: 2px; }
+.card .sec svg { width: 78%; height: 78%; overflow: visible; }
+.card .code { display: flex; justify-content: space-between; gap: .5rem; }
+.card h3 { font: 650 var(--t-md)/1.25 var(--f-body); }
+.card dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .2rem .75rem; font-size: var(--t-xs); }
+.card dt { color: var(--muted); }
+.card dd { margin: 0; text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.card .btn { margin-top: auto; }
+.empty { padding: 2.5rem 1rem; text-align: center; color: var(--muted); background: var(--surface); grid-column: 1 / -1; }
+
+path.metal { fill: url(#metalFill); stroke: var(--ink); stroke-width: .35; stroke-linejoin: round; fill-rule: evenodd; }
+path.diff { fill: var(--diffuser); stroke: var(--muted); stroke-width: .3; stroke-dasharray: 1 .6; }
+
+/* Acabamentos */
+.finishes { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; }
+.finish { display: grid; gap: .6rem; }
+.finish .sw { height: 120px; border-radius: 2px; border: 1px solid var(--line); position: relative; overflow: hidden; }
+.finish .sw::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, rgba(255,255,255,.07) 0 1px, transparent 1px 3px); }
+.finish h3 { font: 650 var(--t-sm)/1.2 var(--f-body); }
+.finish p { font-size: var(--t-xs); color: var(--muted); }
+
+/* Aplicações */
+.apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; border-top: 1px solid var(--ink); }
+.app { padding: 1.25rem 1.25rem 1.5rem 0; border-bottom: 1px solid var(--line); display: grid; gap: .5rem; align-content: start; }
+.app h3 { font-size: var(--t-lg); font-weight: 700; font-stretch: 112%; }
+.app p { font-size: var(--t-sm); color: var(--muted); max-width: 40ch; }
+.app .eyebrow { color: var(--accent); }
+
+/* Como comprar */
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; counter-reset: s; }
+.step { display: grid; gap: .6rem; align-content: start; padding-top: 1rem; border-top: 2px solid var(--ink); counter-increment: s; }
+.step::before { content: "Etapa " counter(s); font: 500 var(--t-xs)/1 var(--f-mono); color: var(--accent); text-transform: uppercase; letter-spacing: .1em; }
+.step h3 { font-size: var(--t-lg); font-weight: 700; font-stretch: 105%; }
+.step p { font-size: var(--t-sm); color: var(--muted); }
+@media (max-width: 860px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .steps { grid-template-columns: 1fr; } }
+
+.band { background: var(--surface); border-block: 1px solid var(--line); }
+
+/* Contato */
+.contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: clamp(2rem, 5vw, 4rem); }
+.contact ul { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 1rem; }
+.contact li { display: grid; gap: .15rem; }
+.contact li span.v { font-size: var(--t-lg); font-family: var(--f-display); font-weight: 650; font-stretch: 105%; user-select: all; }
+form.f { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.field { display: grid; gap: .35rem; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: var(--t-xs); font-weight: 600; }
+.field input, .field select, .field textarea {
+  font: inherit; font-size: var(--t-sm); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 3px; padding: .7rem .8rem; width: 100%; min-width: 0;
+}
+.field input:focus, .field select:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
+.field textarea { resize: vertical; min-height: 110px; }
+.note { font-size: var(--t-xs); color: var(--muted); }
+.ok { color: var(--ok); font-weight: 600; font-size: var(--t-sm); }
+@media (max-width: 760px) { .contact { grid-template-columns: 1fr; } form.f { grid-template-columns: 1fr; } }
+
+/* Rodapé — carimbo */
+footer { padding-block: 2.5rem 3rem; }
+.stamp { display: grid; grid-template-columns: 2fr repeat(3, minmax(0, 1fr)); border: 1px solid var(--ink); }
+.stamp > div { padding: .8rem 1rem; border-left: 1px solid var(--ink); display: grid; gap: .25rem; min-width: 0; }
+.stamp > div:first-child { border-left: 0; }
+.stamp .v { font-size: var(--t-sm); font-weight: 600; overflow-wrap: anywhere; }
+@media (max-width: 760px) { .stamp { grid-template-columns: 1fr 1fr; } .stamp > div:first-child { grid-column: 1 / -1; } .stamp > div:nth-child(n+2) { border-top: 1px solid var(--ink); } .stamp > div:nth-child(2) { border-left: 0; } }
+
+/* Diálogo de item e gaveta de orçamento */
+dialog { border: 1px solid var(--line); border-radius: 4px; padding: 0; background: var(--surface); color: var(--ink); width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); }
+dialog::backdrop { background: rgba(10, 12, 14, .55); }
+.dlg { padding: 1.5rem; display: grid; gap: 1.1rem; }
+.dlg header { display: flex; gap: 1rem; align-items: center; }
+.dlg header .sec { width: 84px; height: 64px; flex: none; display: grid; place-items: center; background: var(--bg); border-radius: 2px; }
+.dlg header .sec svg { width: 74%; height: 74%; overflow: visible; }
+.dlg h3 { font: 650 var(--t-lg)/1.2 var(--f-body); }
+.seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.seg button { font: 600 var(--t-xs)/1 var(--f-body); padding: .75rem; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.calc { background: var(--bg); border-radius: 3px; padding: .9rem 1rem; display: grid; gap: .3rem; font-size: var(--t-sm); }
+.calc div { display: flex; justify-content: space-between; gap: 1rem; }
+.calc div span:last-child { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.calc .tot { border-top: 1px solid var(--line); padding-top: .4rem; margin-top: .2rem; font-weight: 600; }
+.actions { display: flex; gap: .75rem; justify-content: flex-end; flex-wrap: wrap; }
+
+aside.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 40; width: min(440px, 100vw);
+  background: var(--surface); border-left: 1px solid var(--line);
+  display: flex; flex-direction: column; transform: translateX(100%); transition: transform .25s ease;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  visibility: hidden;
+}
+aside.drawer.open { transform: none; visibility: visible; }
+.scrim { position: fixed; inset: 0; z-index: 35; background: rgba(10, 12, 14, .45); }
+.drawer .dh { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border-bottom: 1px solid var(--line); }
+.drawer .dh h2 { font-size: var(--t-lg); }
+.drawer .db { overflow-y: auto; padding: 1.25rem; display: grid; gap: 1.25rem; align-content: start; flex: 1; }
+.line { display: grid; grid-template-columns: 1fr auto; gap: .2rem 1rem; padding-bottom: .9rem; border-bottom: 1px solid var(--line); }
+.line b { font-size: var(--t-sm); }
+.line small { color: var(--muted); font-size: var(--t-xs); grid-column: 1; }
+.line .rm { grid-row: 1 / span 2; grid-column: 2; align-self: center; background: none; border: 0; color: var(--muted); cursor: pointer; font-size: var(--t-xs); text-decoration: underline; }
+.line .rm:hover { color: var(--ink); }
+textarea.msg { width: 100%; min-height: 160px; font: 400 var(--t-xs)/1.5 var(--f-mono); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 3px; padding: .75rem; resize: vertical; }
+.x { background: none; border: 1px solid var(--line); color: var(--ink); width: 36px; height: 36px; border-radius: 3px; cursor: pointer; font-size: 1.1rem; }
+</style>
+
+<!-- Gradiente metálico compartilhado pelas seções transversais -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="metalFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="var(--metal-b)" style="stop-color: var(--metal-b)"/>
+      <stop offset=".55" stop-color="var(--metal-a)" style="stop-color: var(--metal-a)"/>
+      <stop offset="1" stop-color="var(--metal-b)" style="stop-color: var(--metal-b)"/>
+    </linearGradient>
+    <radialGradient id="ledGlow" cx=".5" cy="1" r=".75">
+      <stop offset="0" style="stop-color: var(--glow); stop-opacity: .85"/>
+      <stop offset=".45" style="stop-color: var(--glow); stop-opacity: .25"/>
+      <stop offset="1" style="stop-color: var(--glow); stop-opacity: 0"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Atitude Lumi, início">
+      <svg viewBox="0 0 30 30" aria-hidden="true"><path class="metal" d="M3 6h5v15h14V6h5v21H3z"/><rect x="9.5" y="4" width="11" height="3" rx="1" style="fill: var(--glow)"/></svg>
+      <b>Atitude <span>Lumi</span></b>
+    </a>
+    <nav class="main" aria-label="Seções">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#acabamentos">Acabamentos</a>
+      <a href="#aplicacoes">Aplicações</a>
+      <a href="#como-comprar">Como comprar</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <button class="btn small cart-btn" id="openCart" type="button">Orçamento <span class="count" id="cartCount">0</span></button>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Perfis de alumínio extrudado · Liga 6063-T5</span>
+        <h1>Alumínio na medida <em>do seu projeto</em></h1>
+        <p class="lede">Tubos, cantoneiras, perfis U e T, barras chatas e perfis para fita de LED. Vendemos a barra inteira de 6 metros ou já cortada no comprimento que você precisa.</p>
+        <div class="ctas">
+          <a class="btn" href="#catalogo">Ver catálogo</a>
+          <a class="btn ghost" href="#contato">Falar com um vendedor</a>
+        </div>
+      </div>
+      <figure class="drawing" style="margin:0">
+        <svg id="heroDrawing" viewBox="-20 -26 74 52" role="img" aria-label="Seção transversal do perfil de LED de embutir LD-2412 com cotas em milímetros"></svg>
+        <figcaption class="tag">
+          <span class="eyebrow">Seção · LD-2412 · Perfil LED de embutir</span>
+          <span class="eyebrow">Escala 4:1 · cotas em mm</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="specs">
+    <div class="wrap">
+      <div class="s"><b class="mono">6,00 m</b><span>Comprimento da barra padrão</span></div>
+      <div class="s"><b>Corte sob medida</b><span>Peças a partir de 50 mm</span></div>
+      <div class="s"><b>6 acabamentos</b><span>Anodizado e pintura eletrostática</span></div>
+      <div class="s"><b class="mono">2,70 g/cm³</b><span>Densidade usada no cálculo de peso</span></div>
+    </div>
+  </div>
+
+  <section class="block" id="catalogo">
+    <div class="wrap">
+      <div class="head">
+        <div class="txt">
+          <span class="eyebrow">Catálogo</span>
+          <h2>Perfis a pronta entrega</h2>
+          <p>Cada peça mostra a seção transversal em escala, a espessura da parede e o peso por metro. Adicione ao orçamento e informe se quer barras inteiras ou peças cortadas.</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div class="filters" id="filters" role="group" aria-label="Filtrar por categoria"></div>
+        <label class="search" for="q">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5"/></svg>
+          <input id="q" type="search" placeholder="Buscar: 25 × 25, cantoneira, LED…" autocomplete="off">
+        </label>
+      </div>
+      <div class="grid" id="grid" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="block band" id="acabamentos">
+    <div class="wrap">
+      <div class="head">
+        <div class="txt">
+          <span class="eyebrow">Acabamentos</span>
+          <h2>Superfície pronta para instalar</h2>
+          <p>Anodização protege contra corrosão e mantém o brilho metálico. A pintura eletrostática a pó cobre o perfil com cor uniforme e boa resistência a riscos.</p>
+        </div>
+      </div>
+      <div class="finishes" id="finishes"></div>
+    </div>
+  </section>
+
+  <section class="block" id="aplicacoes">
+    <div class="wrap">
+      <div class="head">
+        <div class="txt">
+          <span class="eyebrow">Aplicações</span>
+          <h2>Onde nossos perfis trabalham</h2>
+        </div>
+      </div>
+      <div class="apps">
+        <div class="app"><span class="eyebrow">Perfis LED</span><h3>Iluminação</h3><p>Sancas, prateleiras, nichos e marcenaria com fita de LED protegida por difusor leitoso.</p></div>
+        <div class="app"><span class="eyebrow">Tubos · Cantoneiras</span><h3>Móveis e marcenaria</h3><p>Estruturas de mesas, racks, puxadores e acabamento de bordas em MDF.</p></div>
+        <div class="app"><span class="eyebrow">Perfis U · Barras chatas</span><h3>Comunicação visual</h3><p>Molduras de placas, totens, fachadas em ACM e letreiros iluminados.</p></div>
+        <div class="app"><span class="eyebrow">Estruturais</span><h3>Automação e bancadas</h3><p>Perfil com canal 8 para montar bancadas, proteções de máquinas e dispositivos sem solda.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block band" id="como-comprar">
+    <div class="wrap">
+      <div class="head">
+        <div class="txt">
+          <span class="eyebrow">Como comprar</span>
+          <h2>Do catálogo à entrega</h2>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step"><h3>Escolha os perfis</h3><p>Filtre por categoria ou busque pela medida. Confira a seção e o peso por metro.</p></div>
+        <div class="step"><h3>Defina corte e acabamento</h3><p>Barras inteiras de 6 m ou peças cortadas. A calculadora mostra quantas barras serão usadas.</p></div>
+        <div class="step"><h3>Envie o orçamento</h3><p>Sua lista vira uma mensagem pronta para WhatsApp ou e-mail. Respondemos com preço e prazo.</p></div>
+        <div class="step"><h3>Retire ou receba</h3><p>Separação e corte na nossa unidade. Retirada no balcão ou entrega combinada.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contato">
+    <div class="wrap contact">
+      <div>
+        <span class="eyebrow">Contato</span>
+        <h2 style="margin-top:.75rem">Fale com a Atitude Lumi</h2>
+        <p style="color:var(--muted); margin-top:.75rem; max-width:44ch">Tire dúvidas sobre medidas, ligas e prazos de corte. Para pedidos grandes ou perfis fora do catálogo, mande o desenho da seção.</p>
+        <ul id="contactList"></ul>
+      </div>
+      <form class="f" id="contactForm" novalidate>
+        <div class="field"><label for="cNome">Nome</label><input id="cNome" name="nome" required autocomplete="name" placeholder="Seu nome"></div>
+        <div class="field"><label for="cTel">Telefone / WhatsApp</label><input id="cTel" name="tel" required inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000"></div>
+        <div class="field"><label for="cEmail">E-mail</label><input id="cEmail" name="email" type="email" autocomplete="email" placeholder="voce@empresa.com.br"></div>
+        <div class="field"><label for="cAssunto">Assunto</label>
+          <select id="cAssunto" name="assunto">
+            <option>Orçamento de perfis</option>
+            <option>Corte sob medida</option>
+            <option>Perfil fora do catálogo</option>
+            <option>Revenda e atacado</option>
+            <option>Outro assunto</option>
+          </select>
+        </div>
+        <div class="field full"><label for="cMsg">Mensagem</label><textarea id="cMsg" name="msg" required placeholder="Ex.: preciso de 40 peças de tubo 25 × 25 com 780 mm, anodizado preto."></textarea></div>
+        <div class="field full" style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap">
+          <button class="btn" type="submit">Preparar mensagem</button>
+          <span class="note" id="formStatus" role="status">Preencha nome, telefone e mensagem.</span>
+        </div>
+        <div class="field full" id="formOut" hidden>
+          <label for="formMsg">Mensagem pronta para enviar</label>
+          <textarea class="msg" id="formMsg" readonly></textarea>
+          <div class="actions" style="justify-content:flex-start">
+            <button class="btn small" type="button" data-copy="formMsg">Copiar texto</button>
+            <a class="btn small ghost" id="formWa" target="_blank" rel="noopener">Abrir no WhatsApp</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="stamp">
+      <div><span class="eyebrow">Empresa</span><span class="v">Atitude Lumi · Perfis de alumínio</span></div>
+      <div><span class="eyebrow">Material</span><span class="v mono">Al 6063-T5</span></div>
+      <div><span class="eyebrow">Unidade</span><span class="v mono">mm · kg/m</span></div>
+      <div><span class="eyebrow">Folha</span><span class="v mono" id="year">01/01</span></div>
+    </div>
+    <p class="note" style="margin-top:1rem">Pesos calculados a partir da seção nominal; o peso real varia conforme a tolerância de extrusão. Preços e prazos são informados no orçamento.</p>
+  </div>
+</footer>
+
+<!-- Configurar item -->
+<dialog id="itemDlg" aria-labelledby="dlgTitle">
+  <form class="dlg" id="itemForm" method="dialog">
+    <header>
+      <div class="sec" id="dlgSec"></div>
+      <div><span class="eyebrow mono" id="dlgCode"></span><h3 id="dlgTitle"></h3></div>
+    </header>
+    <div class="field"><label for="dFin">Acabamento</label><select id="dFin"></select></div>
+    <div class="field">
+      <span style="font-size:var(--t-xs); font-weight:600">Como você quer comprar</span>
+      <div class="seg" role="group" aria-label="Modo de compra">
+        <button type="button" data-mode="barra" aria-pressed="true">Barras de 6 m</button>
+        <button type="button" data-mode="corte" aria-pressed="false">Peças cortadas</button>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field"><label for="dQtd" id="dQtdLbl">Quantidade de barras</label><input id="dQtd" type="number" min="1" step="1" value="2" inputmode="numeric"></div>
+      <div class="field" id="dLenWrap" hidden><label for="dLen">Comprimento da peça (mm)</label><input id="dLen" type="number" min="50" max="6000" step="1" value="800" inputmode="numeric"></div>
+    </div>
+    <div class="calc" id="dCalc"></div>
+    <div class="actions">
+      <button class="btn ghost" type="button" id="dCancel">Cancelar</button>
+      <button class="btn" type="submit" id="dAdd">Adicionar ao orçamento</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Orçamento -->
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Orçamento" aria-hidden="true">
+  <div class="dh"><h2>Seu orçamento</h2><button class="x" type="button" id="closeCart" aria-label="Fechar orçamento">×</button></div>
+  <div class="db">
+    <div id="lines"></div>
+    <div class="calc" id="cartTot"></div>
+    <div class="field"><label for="oNome">Nome ou empresa</label><input id="oNome" autocomplete="organization" placeholder="Quem está pedindo"></div>
+    <div class="field"><label for="oCidade">Cidade para entrega</label><input id="oCidade" autocomplete="address-level2" placeholder="Ou “retirada no balcão”"></div>
+    <div class="field"><label for="oMsg">Mensagem do orçamento</label><textarea class="msg" id="oMsg" readonly></textarea></div>
+    <div class="actions" style="justify-content:stretch">
+      <button class="btn block" type="button" data-copy="oMsg">Copiar mensagem</button>
+      <a class="btn ghost block" id="oWa" target="_blank" rel="noopener">Abrir no WhatsApp</a>
+      <button class="btn ghost small" type="button" id="clearCart">Limpar orçamento</button>
+    </div>
+    <p class="note" id="copyNote" role="status"></p>
+  </div>
+</aside>
+
+<script>
+/* ===== Dados da empresa: troque pelos contatos reais ===== */
+const CONFIG = {
+  whatsapp: "5500000000000",               // DDI + DDD + número, só dígitos
+  telefoneExibicao: "(00) 00000-0000",
+  email: "contato@atitudelumi.com.br",
+  endereco: "Endereço da loja, Cidade – UF",
+  horario: "Seg. a sex. 8h–18h · Sáb. 8h–12h"
+};
+
+const DENSIDADE = 2.70;   // g/cm³ → kg/m = área(mm²) × 0,0027
+const BARRA = 6000;       // mm
+const SERRA = 4;          // perda de corte por peça (mm)
+
+const nf = (n, d = 2) => n.toLocaleString("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const mm = n => nf(n, Number.isInteger(n) ? 0 : (Math.round(n * 10) === n * 10 ? 1 : 2));
+
+/* ===== Geometria das seções (coordenadas em mm) ===== */
+const poly = pts => "M" + pts.map(p => p.join(" ")).join("L") + "Z";
+const rect = (x, y, w, h) => poly([[x, y], [x + w, y], [x + w, y + h], [x, y + h]]);
+const circ = (cx, cy, r) => `M${cx - r} ${cy}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0Z`;
+
+const SHAPES = {
+  tq: ([a, b, e]) => ({ d: rect(0, 0, a, b) + rect(e, e, a - 2 * e, b - 2 * e), area: a * b - (a - 2 * e) * (b - 2 * e), box: [0, 0, a, b] }),
+  to: ([D, e]) => ({ d: circ(D / 2, D / 2, D / 2) + circ(D / 2, D / 2, D / 2 - e), area: Math.PI / 4 * (D * D - (D - 2 * e) ** 2), box: [0, 0, D, D] }),
+  l:  ([a, b, e]) => ({ d: poly([[0, 0], [e, 0], [e, b - e], [a, b - e], [a, b], [0, b]]), area: e * (a + b - e), box: [0, 0, a, b] }),
+  u:  ([a, h, e]) => ({ d: poly([[0, 0], [e, 0], [e, h - e], [a - e, h - e], [a - e, 0], [a, 0], [a, h], [0, h]]), area: e * (a + 2 * h - 2 * e), box: [0, 0, a, h] }),
+  t:  ([a, h, e]) => ({ d: poly([[0, 0], [a, 0], [a, e], [a / 2 + e / 2, e], [a / 2 + e / 2, h], [a / 2 - e / 2, h], [a / 2 - e / 2, e], [0, e]]), area: e * (a + h - e), box: [0, 0, a, h] }),
+  bc: ([a, e]) => ({ d: rect(0, 0, a, e), area: a * e, box: [0, 0, a, e] }),
+  led: ([w, h, e]) => {
+    const s = SHAPES.u([w, h, e]);
+    return { ...s, diff: rect(e, -1, w - 2 * e, 1), box: [0, -1, w, h + 1] };
+  },
+  lede: ([w, h, e, f]) => ({
+    d: poly([[-f, 0], [e, 0], [e, h - e], [w - e, h - e], [w - e, 0], [w + f, 0], [w + f, e], [w, e], [w, h], [0, h], [0, e], [-f, e]]),
+    area: e * (w + 2 * h - 2 * e) + 2 * f * e,
+    diff: rect(e, -1, w - 2 * e, 1),
+    box: [-f, -1, w + 2 * f, h + 1]
+  }),
+  es: () => {
+    // Perfil 40 × 40 com canal 8 nas quatro faces e furo central
+    const side = [[0, 0], [16, 0], [16, 2.2], [11, 2.2], [11, 5], [15, 9], [25, 9], [29, 5], [29, 2.2], [24, 2.2], [24, 0]];
+    const rot = (p, k) => { let [x, y] = [p[0] - 20, p[1] - 20]; for (let i = 0; i < k; i++) [x, y] = [-y, x]; return [x + 20, y + 20]; };
+    const pts = [0, 1, 2, 3].flatMap(k => side.map(p => rot(p, k)));
+    return { d: poly(pts) + circ(20, 20, 3.4), area: null, box: [0, 0, 40, 40] };
+  }
+};
+
+const CATS = [
+  { id: "todos", nome: "Todos" },
+  { id: "tubos", nome: "Tubos" },
+  { id: "cantoneiras", nome: "Cantoneiras" },
+  { id: "ut", nome: "Perfis U e T" },
+  { id: "chatas", nome: "Barras chatas" },
+  { id: "led", nome: "Perfis para LED" },
+  { id: "estrutural", nome: "Estruturais" }
+];
+
+const PRODUTOS = [
+  { id: "TQ-2020", cat: "tubos", nome: "Tubo quadrado 20 × 20", tipo: "tq", m: [20, 20, 1.2] },
+  { id: "TQ-2525", cat: "tubos", nome: "Tubo quadrado 25 × 25", tipo: "tq", m: [25, 25, 1.5] },
+  { id: "TQ-3030", cat: "tubos", nome: "Tubo quadrado 30 × 30", tipo: "tq", m: [30, 30, 1.5] },
+  { id: "TQ-4040", cat: "tubos", nome: "Tubo quadrado 40 × 40", tipo: "tq", m: [40, 40, 2] },
+  { id: "TQ-5050", cat: "tubos", nome: "Tubo quadrado 50 × 50", tipo: "tq", m: [50, 50, 2] },
+  { id: "TR-4020", cat: "tubos", nome: "Tubo retangular 40 × 20", tipo: "tq", m: [40, 20, 1.5] },
+  { id: "TR-6030", cat: "tubos", nome: "Tubo retangular 60 × 30", tipo: "tq", m: [60, 30, 2] },
+  { id: "TO-1905", cat: "tubos", nome: "Tubo redondo Ø 19,05 (3/4\")", tipo: "to", m: [19.05, 1.2] },
+  { id: "TO-2540", cat: "tubos", nome: "Tubo redondo Ø 25,4 (1\")", tipo: "to", m: [25.4, 1.5] },
+  { id: "TO-3810", cat: "tubos", nome: "Tubo redondo Ø 38,1 (1 1/2\")", tipo: "to", m: [38.1, 1.6] },
+  { id: "CA-2020", cat: "cantoneiras", nome: "Cantoneira 20 × 20", tipo: "l", m: [20, 20, 2] },
+  { id: "CA-2525", cat: "cantoneiras", nome: "Cantoneira 25 × 25", tipo: "l", m: [25, 25, 3] },
+  { id: "CA-4040", cat: "cantoneiras", nome: "Cantoneira 40 × 40", tipo: "l", m: [40, 40, 3] },
+  { id: "CA-5025", cat: "cantoneiras", nome: "Cantoneira abas desiguais 50 × 25", tipo: "l", m: [50, 25, 3] },
+  { id: "PU-2512", cat: "ut", nome: "Perfil U 25 × 12", tipo: "u", m: [25, 12, 2] },
+  { id: "PU-4020", cat: "ut", nome: "Perfil U 40 × 20", tipo: "u", m: [40, 20, 2] },
+  { id: "PT-2525", cat: "ut", nome: "Perfil T 25 × 25", tipo: "t", m: [25, 25, 3] },
+  { id: "PT-3838", cat: "ut", nome: "Perfil T 38 × 38", tipo: "t", m: [38, 38, 3] },
+  { id: "BC-2503", cat: "chatas", nome: "Barra chata 25 × 3", tipo: "bc", m: [25, 3] },
+  { id: "BC-3805", cat: "chatas", nome: "Barra chata 38 × 5", tipo: "bc", m: [38, 5] },
+  { id: "BC-5005", cat: "chatas", nome: "Barra chata 50 × 5", tipo: "bc", m: [50, 5] },
+  { id: "LD-1708", cat: "led", nome: "Perfil LED de sobrepor 17 × 8 com difusor", tipo: "led", m: [17, 8, 1.2] },
+  { id: "LD-2412", cat: "led", nome: "Perfil LED de embutir 24 × 12 com difusor", tipo: "lede", m: [18, 12, 1.2, 3] },
+  { id: "ES-4040", cat: "estrutural", nome: "Perfil estrutural 40 × 40 canal 8", tipo: "es", m: [], kgm: 1.45 }
+];
+
+PRODUTOS.forEach(p => {
+  p.geo = SHAPES[p.tipo](p.m);
+  p.kgm = p.kgm ?? p.geo.area * DENSIDADE / 1000;
+  p.aprox = p.tipo === "es";
+  p.esp = { tq: 2, to: 1, l: 2, u: 2, t: 2, bc: 1, led: 2, lede: 2 }[p.tipo];
+});
+
+const ACABAMENTOS = [
+  { id: "natural", nome: "Natural fosco", desc: "Anodizado incolor, acetinado.", bg: "linear-gradient(135deg,#d9dde1,#b6bcc3 55%,#e6e9ec)" },
+  { id: "preto-anod", nome: "Anodizado preto", desc: "Preto profundo com reflexo metálico.", bg: "linear-gradient(135deg,#3b3f45,#17191c 55%,#2c3035)" },
+  { id: "bronze", nome: "Anodizado bronze", desc: "Tom café, comum em esquadrias.", bg: "linear-gradient(135deg,#7d6248,#4c3a29 55%,#6b533c)" },
+  { id: "champanhe", nome: "Anodizado champanhe", desc: "Dourado discreto para móveis.", bg: "linear-gradient(135deg,#e2d3b2,#bea983 55%,#d8c6a1)" },
+  { id: "branco", nome: "Pintado branco", desc: "Pintura eletrostática a pó.", bg: "linear-gradient(135deg,#ffffff,#eceeee 55%,#f7f7f6)" },
+  { id: "preto-fosco", nome: "Pintado preto fosco", desc: "Sem brilho, toque aveludado.", bg: "linear-gradient(135deg,#2a2a2a,#1c1c1c 55%,#252525)" }
+];
+const finName = id => ACABAMENTOS.find(a => a.id === id)?.nome ?? id;
+
+/* ===== Desenho ===== */
+function sectionSvg(p, label = true) {
+  const [x, y, w, h] = p.geo.box, pad = Math.max(w, h) * .06;
+  return `<svg viewBox="${x - pad} ${y - pad} ${w + 2 * pad} ${h + 2 * pad}" ${label ? `role="img" aria-label="Seção transversal ${p.nome}"` : 'aria-hidden="true"'}>
+    <path class="metal" d="${p.geo.d}" style="stroke-width:${Math.max(w, h) / 140}"/>
+    ${p.geo.diff ? `<path class="diff" d="${p.geo.diff}" style="stroke-width:${Math.max(w, h) / 200}"/>` : ""}
+  </svg>`;
+}
+
+function heroSvg() {
+  const p = PRODUTOS.find(q => q.id === "LD-2412");
+  const [w, h, e, f] = p.m;
+  const dim = (x1, y1, x2, y2, txt, tx, ty, vertical) => `
+    <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke: var(--muted)" stroke-width=".18" marker-start="url(#arr)" marker-end="url(#arr)"/>
+    <text x="${tx}" y="${ty}" ${vertical ? `transform="rotate(-90 ${tx} ${ty})"` : ""} text-anchor="middle" style="fill: var(--ink); font: 500 2.1px var(--f-mono)">${txt}</text>`;
+  const ext = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke: var(--line)" stroke-width=".15"/>`;
+  return `
+    <defs><marker id="arr" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="3.2" markerHeight="3.2" orient="auto-start-reverse"><path d="M0 0L6 3L0 6Z" style="fill: var(--muted)"/></marker></defs>
+    <ellipse class="glow" cx="${w / 2}" cy="-1" rx="${w * 1.1}" ry="15" fill="url(#ledGlow)" transform="translate(0 -8) "/>
+    <line x1="-14" y1="${h / 2}" x2="${w + 14}" y2="${h / 2}" style="stroke: var(--muted)" stroke-width=".12" stroke-dasharray="3 1 .6 1"/>
+    <line x1="${w / 2}" y1="-20" x2="${w / 2}" y2="${h + 6}" style="stroke: var(--muted)" stroke-width=".12" stroke-dasharray="3 1 .6 1"/>
+    <path class="metal" d="${p.geo.d}" stroke-width=".22"/>
+    <rect x="${e + 1.2}" y="${h - e - 1.2}" width="${w - 2 * e - 2.4}" height="1.2" rx=".2" style="fill: var(--glow)"/>
+    <path class="diff" d="${p.geo.diff}" stroke-width=".15"/>
+    ${ext(-f, 0, -f, h + 9)}${ext(w + f, 0, w + f, h + 9)}
+    ${dim(-f, h + 7.5, w + f, h + 7.5, mm(w + 2 * f), w / 2, h + 6.8)}
+    ${ext(0, h, 0, h + 4.5)}${ext(w, h, w, h + 4.5)}
+    ${dim(0, h + 3.5, w, h + 3.5, mm(w), w / 2, h + 2.8)}
+    ${ext(w, h, w + 10, h)}${ext(w + f, 0, w + 10, 0)}
+    ${dim(w + 8.5, 0, w + 8.5, h, mm(h), w + 7.8, h / 2, true)}
+    <text x="-15" y="-18" style="fill: var(--muted); font: 500 1.9px var(--f-mono); letter-spacing: .2px">PAREDE ${mm(e)} · ${nf(p.kgm, 3)} kg/m</text>
+    <text x="-15" y="-15.3" style="fill: var(--muted); font: 500 1.9px var(--f-mono); letter-spacing: .2px">DIFUSOR LEITOSO EM PC</text>`;
+}
+
+/* ===== Catálogo ===== */
+let filtro = "todos", busca = "";
+const $ = s => document.querySelector(s);
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[x×]/g, "x").replace(/\s+/g, "");
+
+function renderFilters() {
+  $("#filters").innerHTML = CATS.map(c => {
+    const n = c.id === "todos" ? PRODUTOS.length : PRODUTOS.filter(p => p.cat === c.id).length;
+    return `<button class="chip" type="button" data-cat="${c.id}" aria-pressed="${c.id === filtro}">${c.nome} <span class="mono" style="opacity:.6">${n}</span></button>`;
+  }).join("");
+}
+
+function dims(p) {
+  const m = p.m;
+  switch (p.tipo) {
+    case "to": return [["Diâmetro", mm(m[0]) + " mm"], ["Parede", mm(m[1]) + " mm"]];
+    case "bc": return [["Largura", mm(m[0]) + " mm"], ["Espessura", mm(m[1]) + " mm"]];
+    case "lede": return [["Largura total", mm(m[0] + 2 * m[3]) + " mm"], ["Parede", mm(m[2]) + " mm"]];
+    case "es": return [["Seção", "40 × 40 mm"], ["Canal", "8 mm"]];
+    default: return [["Medidas", `${mm(m[0])} × ${mm(m[1])} mm`], ["Parede", mm(m[2]) + " mm"]];
+  }
+}
+
+function renderGrid() {
+  const q = norm(busca);
+  const list = PRODUTOS.filter(p => (filtro === "todos" || p.cat === filtro) && (!q || norm(p.nome + p.id).includes(q)));
+  $("#grid").innerHTML = list.length ? list.map(p => `
+    <article class="card">
+      <div class="sec">${sectionSvg(p)}</div>
+      <div class="code"><span class="eyebrow">${p.id}</span><span class="eyebrow">${CATS.find(c => c.id === p.cat).nome}</span></div>
+      <h3>${p.nome}</h3>
+      <dl>
+        ${dims(p).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}
+        <dt>Peso</dt><dd>${p.aprox ? "≈ " : ""}${nf(p.kgm, 3)} kg/m</dd>
+        <dt>Barra 6 m</dt><dd>${p.aprox ? "≈ " : ""}${nf(p.kgm * 6)} kg</dd>
+      </dl>
+      <button class="btn small ghost block" type="button" data-add="${p.id}">Adicionar ao orçamento</button>
+    </article>`).join("")
+    : `<div class="empty">Nenhum perfil encontrado para “${busca.replace(/[<>&"]/g, "")}”. Tente outra medida ou <a href="#contato">peça um perfil fora do catálogo</a>.</div>`;
+}
+
+$("#filters").addEventListener("click", e => {
+  const b = e.target.closest("[data-cat]"); if (!b) return;
+  filtro = b.dataset.cat; renderFilters(); renderGrid();
+});
+$("#q").addEventListener("input", e => { busca = e.target.value; renderGrid(); });
+
+/* ===== Acabamentos ===== */
+$("#finishes").innerHTML = ACABAMENTOS.map(a => `
+  <div class="finish"><div class="sw" style="background:${a.bg}"></div><h3>${a.nome}</h3><p>${a.desc}</p></div>`).join("");
+
+/* ===== Calculadora de corte ===== */
+function plano(p, mode, qtd, len) {
+  if (mode === "barra") return { barras: qtd, pecasBarra: null, sobra: null, kg: p.kgm * 6 * qtd };
+  const porBarra = Math.floor((BARRA + SERRA) / (len + SERRA));
+  if (porBarra < 1) return { erro: "A peça precisa ter no máximo 6.000 mm." };
+  const barras = Math.ceil(qtd / porBarra);
+  const sobra = BARRA - porBarra * len - (porBarra - 1) * SERRA;
+  return { barras, pecasBarra: porBarra, sobra, kg: p.kgm * 6 * barras, kgPecas: p.kgm * len / 1000 * qtd };
+}
+
+/* ===== Diálogo de item ===== */
+const dlg = $("#itemDlg");
+let atual = null, modo = "barra";
+$("#dFin").innerHTML = ACABAMENTOS.map(a => `<option value="${a.id}">${a.nome}</option>`).join("");
+
+function setMode(m) {
+  modo = m;
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === m));
+  $("#dLenWrap").hidden = m !== "corte";
+  $("#dQtdLbl").textContent = m === "corte" ? "Quantidade de peças" : "Quantidade de barras";
+  updCalc();
+}
+function readItem() {
+  const qtd = Math.max(1, Math.floor(+$("#dQtd").value || 0));
+  const len = Math.floor(+$("#dLen").value || 0);
+  return { qtd, len };
+}
+function updCalc() {
+  if (!atual) return;
+  const { qtd, len } = readItem();
+  if (modo === "corte" && len < 50) { $("#dCalc").innerHTML = `<div><span>Informe um comprimento entre 50 e 6.000 mm.</span></div>`; $("#dAdd").disabled = true; return; }
+  const r = plano(atual, modo, qtd, len);
+  if (r.erro) { $("#dCalc").innerHTML = `<div><span>${r.erro}</span></div>`; $("#dAdd").disabled = true; return; }
+  $("#dAdd").disabled = false;
+  $("#dCalc").innerHTML = modo === "barra"
+    ? `<div><span>Comprimento total</span><span>${nf(qtd * 6, 2)} m</span></div>
+       <div class="tot"><span>Peso estimado</span><span>${nf(r.kg)} kg</span></div>`
+    : `<div><span>Peças por barra de 6 m</span><span>${r.pecasBarra}</span></div>
+       <div><span>Sobra por barra (serra de ${SERRA} mm)</span><span>${mm(r.sobra)} mm</span></div>
+       <div><span>Barras utilizadas</span><span>${r.barras}</span></div>
+       <div class="tot"><span>Peso das peças</span><span>${nf(r.kgPecas)} kg</span></div>`;
+}
+function openItem(id) {
+  atual = PRODUTOS.find(p => p.id === id);
+  $("#dlgSec").innerHTML = sectionSvg(atual, false);
+  $("#dlgCode").textContent = atual.id;
+  $("#dlgTitle").textContent = atual.nome;
+  setMode("barra");
+  dlg.showModal();
+}
+document.querySelector(".seg").addEventListener("click", e => { const b = e.target.closest("[data-mode]"); if (b) setMode(b.dataset.mode); });
+["#dQtd", "#dLen"].forEach(s => $(s).addEventListener("input", updCalc));
+$("#dCancel").addEventListener("click", () => dlg.close());
+$("#grid").addEventListener("click", e => { const b = e.target.closest("[data-add]"); if (b) openItem(b.dataset.add); });
+$("#itemForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const { qtd, len } = readItem();
+  const r = plano(atual, modo, qtd, len);
+  if (r.erro) return;
+  cart.push({ id: atual.id, fin: $("#dFin").value, modo, qtd, len: modo === "corte" ? len : null });
+  saveCart(); renderCart(); dlg.close(); openCart();
+});
+
+/* ===== Orçamento ===== */
+let cart = [];
+try { cart = JSON.parse(localStorage.getItem("lumi-orcamento") || "[]").filter(i => PRODUTOS.some(p => p.id === i.id)); } catch { cart = []; }
+function saveCart() { try { localStorage.setItem("lumi-orcamento", JSON.stringify(cart)); } catch {} }
+
+function itemDesc(i) {
+  return i.modo === "barra"
+    ? `${i.qtd} barra${i.qtd > 1 ? "s" : ""} de 6 m`
+    : `${i.qtd} peça${i.qtd > 1 ? "s" : ""} de ${i.len} mm`;
+}
+function waLink(text) { return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`; }
+
+function renderCart() {
+  $("#cartCount").textContent = cart.length;
+  let kg = 0, barras = 0;
+  $("#lines").innerHTML = cart.length ? cart.map((i, idx) => {
+    const p = PRODUTOS.find(x => x.id === i.id), r = plano(p, i.modo, i.qtd, i.len);
+    kg += r.kg; barras += r.barras;
+    return `<div class="line"><b>${p.id} · ${p.nome}</b><small>${itemDesc(i)} · ${finName(i.fin)}${i.modo === "corte" ? ` · usa ${r.barras} barra${r.barras > 1 ? "s" : ""}` : ""}</small>
+      <button class="rm" type="button" data-rm="${idx}" aria-label="Remover ${p.nome}">Remover</button></div>`;
+  }).join("") : `<p class="note">Seu orçamento está vazio. Escolha perfis no catálogo e use “Adicionar ao orçamento”.</p>`;
+  $("#cartTot").hidden = !cart.length;
+  $("#cartTot").innerHTML = `<div><span>Itens</span><span>${cart.length}</span></div>
+    <div><span>Barras de 6 m</span><span>${barras}</span></div>
+    <div class="tot"><span>Peso estimado</span><span>${nf(kg)} kg</span></div>`;
+  const nome = $("#oNome").value.trim(), cidade = $("#oCidade").value.trim();
+  const txt = cart.length ? [
+    "Olá, Atitude Lumi! Gostaria de um orçamento:",
+    "",
+    ...cart.map((i, n) => `${n + 1}. ${i.id} – ${PRODUTOS.find(x => x.id === i.id).nome}\n   ${itemDesc(i)} · ${finName(i.fin)}`),
+    "",
+    `Total: ${barras} barra${barras !== 1 ? "s" : ""} · aprox. ${nf(kg)} kg`,
+    nome ? `Nome: ${nome}` : null,
+    cidade ? `Entrega: ${cidade}` : null
+  ].filter(l => l !== null).join("\n") : "";
+  $("#oMsg").value = txt;
+  $("#oWa").href = txt ? waLink(txt) : "#";
+  $("#oWa").toggleAttribute("aria-disabled", !txt);
+}
+$("#lines").addEventListener("click", e => { const b = e.target.closest("[data-rm]"); if (!b) return; cart.splice(+b.dataset.rm, 1); saveCart(); renderCart(); });
+["#oNome", "#oCidade"].forEach(s => $(s).addEventListener("input", renderCart));
+$("#clearCart").addEventListener("click", () => { cart = []; saveCart(); renderCart(); });
+
+const drawer = $("#drawer"), scrim = $("#scrim");
+function openCart() { drawer.classList.add("open"); drawer.setAttribute("aria-hidden", "false"); scrim.hidden = false; $("#closeCart").focus(); }
+function closeCart() { drawer.classList.remove("open"); drawer.setAttribute("aria-hidden", "true"); scrim.hidden = true; $("#openCart").focus(); }
+$("#openCart").addEventListener("click", openCart);
+$("#closeCart").addEventListener("click", closeCart);
+scrim.addEventListener("click", closeCart);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && drawer.classList.contains("open")) closeCart(); });
+
+/* ===== Copiar ===== */
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-copy]"); if (!b) return;
+  const ta = document.getElementById(b.dataset.copy);
+  if (!ta.value) return;
+  const done = ok => { const old = b.textContent; b.textContent = ok ? "Copiado" : "Texto selecionado, use Ctrl+C"; setTimeout(() => b.textContent = old, 1800); };
+  try {
+    navigator.clipboard.writeText(ta.value).then(() => done(true), () => { ta.select(); done(false); });
+  } catch { ta.select(); done(false); }
+});
+
+/* ===== Contato ===== */
+$("#contactList").innerHTML = [
+  ["WhatsApp e telefone", CONFIG.telefoneExibicao],
+  ["E-mail", CONFIG.email],
+  ["Endereço", CONFIG.endereco],
+  ["Horário", CONFIG.horario]
+].map(([k, v]) => `<li><span class="eyebrow">${k}</span><span class="v">${v}</span></li>`).join("");
+
+$("#contactForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const f = e.target, nome = f.nome.value.trim(), tel = f.tel.value.trim(), msg = f.msg.value.trim();
+  const st = $("#formStatus");
+  if (!nome || !tel || !msg) {
+    st.className = "note";
+    st.textContent = "Falta preencher: " + [!nome && "nome", !tel && "telefone", !msg && "mensagem"].filter(Boolean).join(", ") + ".";
+    (!nome ? f.nome : !tel ? f.tel : f.msg).focus();
+    return;
+  }
+  const txt = `Olá, Atitude Lumi!\nAssunto: ${f.assunto.value}\n\n${msg}\n\n${nome} · ${tel}${f.email.value.trim() ? " · " + f.email.value.trim() : ""}`;
+  $("#formMsg").value = txt;
+  $("#formWa").href = waLink(txt);
+  $("#formOut").hidden = false;
+  st.className = "ok";
+  st.textContent = "Mensagem pronta. Copie ou abra no WhatsApp para enviar.";
+});
+
+/* ===== Início ===== */
+$("#heroDrawing").innerHTML = heroSvg();
+$("#year").textContent = "01/01 · " + new Date().getFullYear();
+renderFilters(); renderGrid(); renderCart();
+</script>
